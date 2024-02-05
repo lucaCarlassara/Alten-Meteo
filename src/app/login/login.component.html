@@ -1,0 +1,23 @@
+<div class="tutto">
+  <img src="https://wallpaperaccess.com/full/1540016.jpg">
+  <div class="titolo-container">
+    <img class="logo" src="https://i.vimeocdn.com/portrait/13930741_640x640">
+    <h1 class="titolo">Alten Meteo</h1>
+  </div>
+  <br>
+  <form (ngSubmit)="login()">
+    <h2>Inserire Credenziali</h2><br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" [(ngModel)]="username" name="username" required>
+    <br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" [(ngModel)]="password" name="password" required>
+    <br><br>
+    <button class="login" type="submit">Login</button>
+    <button type="button" (click)="accessMapWithoutLogin()">Accedi senza login</button>
+  </form>
+  <div *ngIf="loginError" class="error-message">
+    Username o password errati. Riprova.
+  </div>
+</div>
+

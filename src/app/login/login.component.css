@@ -1,0 +1,72 @@
+img {
+  height: 100%;
+  width: 100%;
+}
+  
+  .tutto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    height: 100%;
+    width: 100%;
+  }
+  
+  form {
+    position: absolute;
+    top: 50%; /* Puoi regolare questo valore per centrare il form rispetto al div */
+    left: 50%; /* Puoi regolare questo valore per centrare il form rispetto al div */
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px; /* Sovrapponi il form all'immagine */
+    width: 384px;
+    padding: 40px;
+  }
+  
+  div.error-message {
+    color: red;
+    position: absolute;
+    top: 70%; /* Aumentato lo spazio sopra il messaggio di errore */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+  }
+  
+  h1.titolo {
+    font-size: 36px;
+    position: absolute;
+    left: 35%; /* Aggiunto dimensione del testo */
+  }
+  
+  .titolo-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Sfondo bianco semitrasparente */
+    padding: 60px;
+    border-radius: 8px; /* Aggiunto bordo arrotondato */
+    width: 384px; /* Larghezza del contenitore */
+    margin: 0 auto; /* Centra il contenitore */
+    margin-top: 20px; /* Aggiunto spazio sopra il contenitore */
+    position: absolute;
+    top: 20%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+  }
+
+img.logo{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 5%;
+}
+
+.login{
+  margin-right: 10px;
+}
+
+
+
+
+

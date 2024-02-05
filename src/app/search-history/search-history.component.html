@@ -1,0 +1,18 @@
+<div>
+    <input type="text" placeholder="Search by coordinates" (input)="changeSearchQuery($event.target.value)" />
+    <table>
+      <thead>
+        <tr>
+          <th (click)="changeSortOrder('asc')">Date (Asc)</th>
+          <th (click)="changeSortOrder('desc')">Date (Desc)</th>
+          <th>Coordinates</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let search of searchHistory">
+          <td>{{ search.date | date: 'medium' }}</td>
+          <td>{{ search.coordinates }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

@@ -1,0 +1,62 @@
+.map-container {
+  height: 100vh; /* Imposta l'altezza al 100% dell'altezza della finestra del browser */
+  width: 100vw; /* Imposta la larghezza al 100% della larghezza della finestra del browser */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-frame {
+  height: 100%; /* Altezza al 100% del contenitore padre (map-container) */
+  width: 100%; /* Larghezza al 100% del contenitore padre (map-container) */
+}
+
+#map {
+  height: 100%; /* Altezza al 100% del contenitore padre (map-frame) */
+  width: 100%; /* Larghezza al 100% del contenitore padre (map-frame) */
+}
+
+.menu-container {
+  position: absolute;
+  top: 80px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.capital-menu {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 830px; /* Imposta l'altezza massima desiderata */
+  overflow-y: auto;
+  position: absolute;
+  margin-top: 10px;
+}
+
+.capital-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.capital-menu li {
+  cursor: pointer;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.capital-menu li:hover {
+  background-color: #f0f0f0;
+}
+
+.capital-button{
+  width: 127px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.scrolling-menu {
+  padding: 5px; /* Aggiungi un po' di spazio interno */
+}

@@ -1,0 +1,45 @@
+app-map {
+/* Assicurati che app-map abbia un posizionamento relativo o assoluto */
+    z-index: 0; /* Imposta z-index per app-map */
+}
+
+button {
+    position: absolute; /* Imposta posizionamento assoluto */
+    z-index: 1; /* Imposta z-index per il pulsante */
+    top: 11px; /* Aggiungi un margine superiore per spostare il pulsante al di sopra della mappa */
+    right: 85px; /* Aggiungi un margine sinistro per spostare il pulsante al di sopra della mappa */
+}
+
+h1.titolo {
+    font-size: 24px;
+    position: absolute;
+    left: 32%; /* Aggiunto dimensione del testo */
+    z-index: 1;
+    margin-bottom: 17px;
+  }
+  
+  .titolo-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px; /* Ridotto il padding per evitare l'eccessivo aumento dell'altezza */
+    border-radius: 8px;
+    width: 220px;
+    height: 50px; /* Modificato l'altezza del contenitore */
+    margin: 0 auto;
+    margin-top: 5px;
+    margin-left: 165px;
+    position: absolute;
+    top: 4%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    z-index: 1;
+  }
+
+img.logo{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 5%;
+    z-index: 1;
+}

@@ -79,4 +79,23 @@ export class AuthService {
     this.resetAccessWithoutLogin();
   }
 
+  // Funzione per ottenere il nome dell'utente corrente
+  getCurrentUser(): string {
+    const userData = localStorage.getItem(this.USER_KEY);
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user.username;
+    }
+    return '';
+  }
+
+  // Funzione per ottenere la data dell'ultimo accesso
+  getLastLoginDate(): Date {
+    const tokenExpiration = localStorage.getItem(this.TOKEN_EXPIRATION_KEY);
+    if (tokenExpiration) {
+      return new Date(tokenExpiration);
+    }
+    return null;
+  }
 }
+

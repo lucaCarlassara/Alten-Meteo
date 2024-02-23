@@ -24,4 +24,10 @@ export class AppComponent {
     }, 1000 * 3600 * 24);
   }
 
+  showHistory = false;
+
+  toggleHistoryVisibility(): void {
+    this.showHistory = !this.showHistory;
+  }
+
 }

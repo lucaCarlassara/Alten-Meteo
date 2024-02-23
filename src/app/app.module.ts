@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MapComponent } from './map/map.component';
 import { SearchHistoryComponent } from './search-history/search-history.component';
+import { FooterComponent } from './footer/footer.component';
+import { AuthService } from './auth.service';
 
 @NgModule({
   declarations: [
@@ -13,13 +15,18 @@ import { SearchHistoryComponent } from './search-history/search-history.componen
     LoginComponent,
     MapComponent,
     SearchHistoryComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule // Aggiungi HttpClientModule agli imports
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AuthService],
+  bootstrap: [AppComponent],
+  exports: [FooterComponent]
 })
+
 export class AppModule { }
+
+export class FooterModule { }

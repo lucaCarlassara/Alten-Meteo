@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
+import { MapDataService } from '../map-data.service';
 
 @Component({
   selector: 'app-map',
@@ -10,7 +11,7 @@ export class MapComponent implements AfterViewInit {
   @ViewChild('mapMenu') mapMenu: ElementRef;
   public showMenu = false;
 
-  private selectedLocations: { lat: number, lng: number }[] = [];
+  private selectedLocations: { lat: number, lng: number, date: string }[] = [];
 
   toggleMenu(): void {
     this.showMenu = !this.showMenu;
@@ -136,13 +137,12 @@ export class MapComponent implements AfterViewInit {
       circleMarker.addTo(this.map);
   
       // Crea un popup con le coordinate e apri il popup
-      const popupContent = `<div style='font-size: 14px;'>Lat: ${latlng.lat.toFixed(5)}<br>Lng: ${latlng.lng.toFixed(5)}</div>`;
+      const popupContent = `<div style='font-size: 14px;'>Lat: ${latlng.lat.toFixed(4)}<br>Lng: ${latlng.lng.toFixed(4)}</div>`;
       circleMarker.bindPopup(popupContent).openPopup();
   
       // Aggiorna il riferimento al CircleMarker corrente
       this.currentCircleMarker = circleMarker;
-      this.selectedLocations.push({ lat: latlng.lat, lng: latlng.lng });
-      console.log(this.selectedLocations);
+      this.addLocation(latlng);
     });
 
     // Crea un gruppo di livelli per gestire il cambio tra i livelli
@@ -162,23 +162,22 @@ export class MapComponent implements AfterViewInit {
         opacity: 1,
       });
   
-      marker.bindPopup(`<div style='font-size: 14px;'>${markerData.name}<br>Lat: ${markerData.lat.toFixed(5)}<br>Lng: ${markerData.lng.toFixed(5)}</div>`);
+      marker.bindPopup(`<div style='font-size: 14px;'>${markerData.name}<br>Lat: ${markerData.lat.toFixed(4)}<br>Lng: ${markerData.lng.toFixed(4)}</div>`);
   
       // Aggiungi un ascoltatore di clic a ciascun marker
       marker.on('click', (event) => {
-        this.handleMarkerClick(event, markerData);
+        this.handleMarkerClick(event);
       });
   
       marker.addTo(this.map);
     });
   }
 
-  private handleMarkerClick(event, markerData): void {
+  private handleMarkerClick(event): void {
     const latlng = event.latlng;
   
     // Aggiungi le coordinate al tuo array selectedLocations
-    this.selectedLocations.push({ lat: latlng.lat, lng: latlng.lng });
-    console.log(this.selectedLocations);
+    this.addLocation(latlng);
   }
 
   selectCapital(capital): void {
@@ -189,8 +188,7 @@ export class MapComponent implements AfterViewInit {
     if (selectedMarker) {
       const latlng = L.latLng(selectedMarker.lat, selectedMarker.lng);
 
-      this.selectedLocations.push({ lat: latlng.lat, lng: latlng.lng });
-      console.log(this.selectedLocations);
+      this.addLocation(latlng);
   
       // Trova il marker nella mappa
       const marker = this.findMarkerByLatLng(latlng);
@@ -219,9 +217,36 @@ export class MapComponent implements AfterViewInit {
   }
   
 
-  constructor() {}
+  constructor(private mapDataService: MapDataService) {}
 
   ngAfterViewInit(): void {
     this.initMap();
   }
+
+  addLocation(latlng: L.LatLng): void {
+    const currentDate = new Date();
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+    
+    // Formatta l'ora, i minuti e i secondi come stringa con due cifre
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+    const newLocation = {
+      lat: latlng.lat.toFixed(4),
+      lng: latlng.lng.toFixed(4),
+      date: formattedTime
+    };
+  
+    // Verifica se il numero di elementi supera 10
+    if (this.selectedLocations.length >= 10) {
+        // Se sì, rimuovi il primo elemento (politica FIFO)
+        this.selectedLocations.shift();
+    }
+  
+    // Aggiungi il nuovo elemento
+    this.selectedLocations.push(newLocation);
+    this.mapDataService.updateSelectedLocations(this.selectedLocations);
+    console.log(this.selectedLocations);
+}
 }

@@ -3,6 +3,28 @@ app-map {
     z-index: 0; /* Imposta z-index per app-map */
 }
 
+app-search-history {
+    position: absolute; /* Imposta posizionamento assoluto */
+    z-index: 1; /* Imposta z-index per il pulsante */
+    top: 11px; /* Aggiungi un margine superiore per spostare il pulsante al di sopra della mappa */
+    right: 250px; /* Aggiungi un margine sinistro per spostare il pulsante al di sopra della mappa */
+}
+
+app-footer {
+    position: absolute; /* Imposta posizionamento assoluto */
+    z-index: 1; /* Imposta z-index per il pulsante */
+    bottom: 0px; /* Aggiungi un margine superiore per spostare il pulsante al di sopra della mappa */
+    left: 10px;
+}
+
+.cronologia{
+    position: absolute; /* Imposta posizionamento assoluto */
+    z-index: 1; /* Imposta z-index per il pulsante */
+    top: 11px; /* Aggiungi un margine superiore per spostare il pulsante al di sopra della mappa */
+    right: 150px;
+}
+
+
 button {
     position: absolute; /* Imposta posizionamento assoluto */
     z-index: 1; /* Imposta z-index per il pulsante */

@@ -1,0 +1,25 @@
+#searchInput {
+    position: absolute;
+    top: 30px; /* Regola questo valore in base alla distanza desiderata dal basso */
+  }
+
+.ricerche {
+    position: absolute;
+    top: 62px;
+}
+
+tr {
+    border: 1px solid #000; /* Aggiunge una linea nera al fondo di ogni riga */
+  }
+  
+  /* Stile delle righe pari della tabella */
+  tr:nth-child(even) {
+    background-color: #f2f2f2; /* Grigio chiaro */
+    margin-bottom: 5px;
+  }
+  
+  /* Stile delle righe dispari della tabella */
+  tr:nth-child(odd) {
+    background-color: #ffffff; /* Bianco */
+    margin-bottom: 5px;
+  }

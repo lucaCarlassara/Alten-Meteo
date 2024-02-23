@@ -7,6 +7,9 @@
   </div>
   <app-map (mousedown)="disableClick($event)" (mouseup)="enableClick($event)"></app-map>
   <button (click)="resetAuthentication()">Logout</button>
+  <button class="cronologia" (click)="toggleHistoryVisibility()">Cronologia</button>
+  <app-search-history *ngIf="showHistory"></app-search-history>
+  <app-footer></app-footer>
 </div>
 
 <div *ngIf="!authService.isAuthenticated && authService.accessWithoutLogin" style="display: flex; flex-direction: column; height: 100vh;">

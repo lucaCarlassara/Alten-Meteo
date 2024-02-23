@@ -29,7 +29,7 @@
   padding: 5px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-height: 830px; /* Imposta l'altezza massima desiderata */
+  max-height: 780px; /* Imposta l'altezza massima desiderata */
   overflow-y: auto;
   position: absolute;
   margin-top: 10px;

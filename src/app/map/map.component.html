@@ -1,5 +1,28 @@
 <div class="map-container">
   <div class="map-frame">
+    <div class="button-group">
+      <button class="select-all-button" (click)="selectAll()">Seleziona Tutti</button>
+
+      <button class="parametri-generali-button" (click)="toggleGeneralParams()">Parametri Generali</button>
+      <button class="temperature-button" (click)="toggleTemperature()" [ngClass]="{'selected': showTemperature}">Temperatura</button>
+      <button class="app-temp-button" (click)="toggleAppTemp()" [ngClass]="{'selected': showAppTemp}">Temperatura Percepita</button>
+      <button class="umidity-button" (click)="toggleUmidity()" [ngClass]="{'selected': showUmidity}">Umidità</button>
+      <button class="dew-point-button" (click)="toggleDewPoint()" [ngClass]="{'selected': showDewPoint}">Punto di Rugiada</button>
+      <button class="pressure-button" (click)="togglePressure()" [ngClass]="{'selected': showPressure}">Pressione</button>
+
+      <button class="vento-button" (click)="toggleVento()">Velocità del Vento</button>
+      <button class="wind-speed-button10" (click)="toggleWindSpeed10()" [ngClass]="{'selected': showWindSpeed10}">Velocità Vento 10m</button>
+      <button class="wind-speed-button80" (click)="toggleWindSpeed80()" [ngClass]="{'selected': showWindSpeed80}">Velocità Vento 80m</button>
+      <button class="wind-speed-button120" (click)="toggleWindSpeed120()" [ngClass]="{'selected': showWindSpeed120}">Velocità Vento 120m</button>
+      <button class="wind-speed-button180" (click)="toggleWindSpeed180()" [ngClass]="{'selected': showWindSpeed180}">Velocità Vento 180m</button>
+
+      <button class="vento-direzione-button" (click)="toggleDirezioneVento()">Direzione del Vento</button>
+      <button class="wind-direction10-button" (click)="toggleWindDirection10()" [ngClass]="{'selected': showWindDirection10}">Direzione Vento 10m</button>
+      <button class="wind-direction80-button" (click)="toggleWindDirection80()" [ngClass]="{'selected': showWindDirection80}">Direzione Vento 80m</button>
+      <button class="wind-direction120-button" (click)="toggleWindDirection120()" [ngClass]="{'selected': showWindDirection120}">Direzione Vento 120m</button>
+      <button class="wind-direction180-button" (click)="toggleWindDirection180()" [ngClass]="{'selected': showWindDirection180}">Direzione Vento 180m</button>
+
+    </div>
     <div id="map"></div>
     <div class="menu-container">
       <button class="capital-button" (click)="toggleMenu()">Capitali</button>

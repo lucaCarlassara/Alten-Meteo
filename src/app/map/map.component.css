@@ -60,3 +60,55 @@
 .scrolling-menu {
   padding: 5px; /* Aggiungi un po' di spazio interno */
 }
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  top: 10%;
+  left: 90.85%;
+  position: absolute;
+  width: 150px;
+  z-index: 1000;
+}
+
+button {
+  width: 163px;
+}
+
+.selected {
+  background-color: green;
+  color: white;
+}
+
+.select-all-button {
+  margin-bottom: 10px;
+}
+
+.parametri-generali-button {
+  margin-bottom: 10px;
+  color: #ffffff; /* Colore del testo bianco */
+  background-color: #999999;
+}
+
+.pressure-button {
+  margin-bottom: 10px;
+}
+
+.vento-button {
+  margin-bottom: 10px;
+  color: #ffffff; /* Colore del testo bianco */
+  background-color: #999999;
+}
+
+.wind-speed-button180{
+  margin-bottom: 10px;
+}
+
+.vento-direzione-button {
+  color: #ffffff; /* Colore del testo bianco */
+  background-color: #999999;
+  margin-bottom: 10px;
+}
+
+
+

@@ -8,6 +8,7 @@ import { MapComponent } from './map/map.component';
 import { SearchHistoryComponent } from './search-history/search-history.component';
 import { FooterComponent } from './footer/footer.component';
 import { AuthService } from './auth.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AuthService } from './auth.service';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule // Aggiungi HttpClientModule agli imports
+    HttpClientModule,
+    MatExpansionModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],

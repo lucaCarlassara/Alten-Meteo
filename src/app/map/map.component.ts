@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
 import { MapDataService } from '../map-data.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-map',
@@ -119,12 +120,12 @@ export class MapComponent implements AfterViewInit {
 
     this.map.on('click', (event) => {
       const latlng = event.latlng;
-  
+    
       // Rimuovi il CircleMarker corrente se esiste
       if (this.currentCircleMarker) {
         this.map.removeLayer(this.currentCircleMarker);
       }
-  
+    
       // Crea un CircleMarker nel punto in cui l'utente ha fatto clic
       const circleMarker = L.circleMarker(latlng, {
         radius: 6,
@@ -132,15 +133,16 @@ export class MapComponent implements AfterViewInit {
         fillColor: 'orange',
         fillOpacity: 0.8,
       });
-  
+    
       // Aggiungi il CircleMarker alla mappa
       circleMarker.addTo(this.map);
-  
-      // Crea un popup con le coordinate e apri il popup
-      const popupContent = `<div style='font-size: 14px;'>Lat: ${latlng.lat.toFixed(4)}<br>Lng: ${latlng.lng.toFixed(4)}</div>`;
-      circleMarker.bindPopup(popupContent).openPopup();
-  
-      // Aggiorna il riferimento al CircleMarker corrente
+    
+      this.displayInfo(latlng, circleMarker.name).then((popupContent) => {
+        circleMarker.bindPopup(popupContent).openPopup();
+      }).catch((error) => {
+        console.error(error);
+      });
+
       this.currentCircleMarker = circleMarker;
       this.addLocation(latlng);
     });
@@ -162,7 +164,14 @@ export class MapComponent implements AfterViewInit {
         opacity: 1,
       });
   
-      marker.bindPopup(`<div style='font-size: 14px;'>${markerData.name}<br>Lat: ${markerData.lat.toFixed(4)}<br>Lng: ${markerData.lng.toFixed(4)}</div>`);
+      const url = this.generateForecastUrl(markerData.lat, markerData.lng);
+      this.http.get(url).subscribe((response: any) => {
+
+      let popupContent = `<div style='font-size: 14px;'>${markerData.name}<br>
+        Lat: ${markerData.lat.toFixed(4)}<br>Lng: ${markerData.lng.toFixed(4)}<br>`;
+
+      marker.bindPopup(popupContent);
+      });
   
       // Aggiungi un ascoltatore di clic a ciascun marker
       marker.on('click', (event) => {
@@ -175,27 +184,36 @@ export class MapComponent implements AfterViewInit {
 
   private handleMarkerClick(event): void {
     const latlng = event.latlng;
-  
-    // Aggiungi le coordinate al tuo array selectedLocations
+    const marker = this.findMarkerByLatLng(latlng);
+    this.displayInfo(latlng, marker.name).then((popupContent) => {
+      marker.bindPopup(popupContent).openPopup();
+    }).catch((error) => {
+      console.error(error);
+    });
+
     this.addLocation(latlng);
   }
 
   selectCapital(capital): void {
     // Trova il marker corrispondente nella mappa
     const selectedMarker = this.markersData.find(marker => marker.name === capital.name);
-  
+
     // Se il marker esiste, apri il popup
     if (selectedMarker) {
       const latlng = L.latLng(selectedMarker.lat, selectedMarker.lng);
 
       this.addLocation(latlng);
-  
+
       // Trova il marker nella mappa
       const marker = this.findMarkerByLatLng(latlng);
-  
+
       // Se il marker esiste, apri il popup
       if (marker) {
-        marker.openPopup();
+        this.displayInfo(latlng, marker.name).then((popupContent) => {
+          marker.bindPopup(popupContent).openPopup();
+        }).catch((error) => {
+          console.error(error);
+        });
       }
     }
   }
@@ -217,7 +235,7 @@ export class MapComponent implements AfterViewInit {
   }
   
 
-  constructor(private mapDataService: MapDataService) {}
+  constructor(private mapDataService: MapDataService, private http: HttpClient) {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -248,5 +266,256 @@ export class MapComponent implements AfterViewInit {
     this.selectedLocations.push(newLocation);
     this.mapDataService.updateSelectedLocations(this.selectedLocations);
     console.log(this.selectedLocations);
+  }
+
+  private generateForecastUrl(lat: number, lng: number): string {
+    let url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=`;
+
+    if (this.showTemperature){
+      url += ',temperature_2m';
+    }
+
+    if (this.showWindSpeed10) {
+      url += ',wind_speed_10m';
+    }
+
+    if (this.showWindSpeed80) {
+      url += ',wind_speed_80m';
+    }
+
+    if (this.showWindSpeed120) {
+      url += ',wind_speed_120m';
+    }
+
+    if (this.showWindSpeed180) {
+      url += ',wind_speed_180m';
+    }
+
+    if (this.showWindDirection10) {
+      url += ',wind_direction_10m';
+    }
+
+    if (this.showWindDirection80) {
+      url += '&current=wind_direction_80m';
+    }
+    
+    if (this.showWindDirection120) {
+      url += '&current=wind_direction_120m';
+    }
+    
+    if (this.showWindDirection180) {
+      url += '&current=wind_direction_180m';
+    }    
+
+    if (this.showUmidity) {
+      url += ',relative_humidity_2m';
+    }
+
+    if (this.showDewPoint) {
+      url += ',dew_point_2m';
+    }
+
+    if (this.showPressure) {
+      url += ',pressure_msl';
+    }
+
+    if (this.showAppTemp) {
+      url += ',apparent_temperature';
+    }
+
+    console.log(url);
+    return url;
+  }
+
+  showTemperature = false;
+  showWindSpeed10 = false;
+  showWindSpeed80 = false;
+  showWindSpeed120 = false;
+  showWindSpeed180 = false;
+  showWindDirection10 = false;
+  showWindDirection80 = false;
+  showWindDirection120 = false;
+  showWindDirection180 = false;
+  showUmidity = false;
+  showDewPoint = false;
+  showPressure = false;
+  showAppTemp = false;
+
+  selectAll(): void {
+    this.showTemperature = !this.showTemperature;
+    this.showAppTemp = !this.showAppTemp;
+    this.showUmidity = !this.showUmidity;
+    this.showDewPoint = !this.showDewPoint;
+    this.showPressure = !this.showPressure;
+    this.showWindSpeed10 = !this.showWindSpeed10;
+    this.showWindSpeed80 = !this.showWindSpeed80;
+    this.showWindSpeed120 = !this.showWindSpeed120;
+    this.showWindSpeed180 = !this.showWindSpeed180;
+    this.showWindDirection10 = !this.showWindDirection10;
+    this.showWindDirection80 = !this.showWindDirection80;
+    this.showWindDirection120 = !this.showWindDirection120;
+    this.showWindDirection180 = !this.showWindDirection180;
+  }
+
+  toggleDirezioneVento(): void {
+    this.showWindDirection10 = !this.showWindDirection10;
+    this.showWindDirection80 = !this.showWindDirection80;
+    this.showWindDirection120 = !this.showWindDirection120;
+    this.showWindDirection180 = !this.showWindDirection180;
+  }  
+
+  toggleGeneralParams(): void {
+    this.showTemperature = !this.showTemperature;
+    this.showAppTemp = !this.showAppTemp;
+    this.showUmidity = !this.showUmidity;
+    this.showDewPoint = !this.showDewPoint;
+    this.showPressure = !this.showPressure;
+  }
+
+  toggleVento(): void {
+    this.showWindSpeed10 = !this.showWindSpeed10;
+    this.showWindSpeed80 = !this.showWindSpeed80;
+    this.showWindSpeed120 = !this.showWindSpeed120;
+    this.showWindSpeed180 = !this.showWindSpeed180;
+  }  
+
+  toggleTemperature(): void {
+    this.showTemperature = !this.showTemperature;
+  }
+
+  toggleWindSpeed10(): void {
+    this.showWindSpeed10 = !this.showWindSpeed10;
+  }
+
+  toggleWindSpeed80(): void {
+    this.showWindSpeed80 = !this.showWindSpeed80;
+  }
+
+  toggleWindSpeed120(): void {
+    this.showWindSpeed120 = !this.showWindSpeed120;
+  }
+
+  toggleWindSpeed180(): void {
+    this.showWindSpeed180 = !this.showWindSpeed180;
+  }
+
+  toggleWindDirection10(): void {
+    this.showWindDirection10 = !this.showWindDirection10;
+  }
+
+  toggleWindDirection80(): void {
+    this.showWindDirection80 = !this.showWindDirection80;
+  }
+  
+  toggleWindDirection120(): void {
+    this.showWindDirection120 = !this.showWindDirection120;
+  }
+  
+  toggleWindDirection180(): void {
+    this.showWindDirection180 = !this.showWindDirection180;
+  }
+
+  toggleUmidity(): void {
+    this.showUmidity = !this.showUmidity;
+  }
+
+  toggleDewPoint(): void {
+    this.showDewPoint = !this.showDewPoint;
+  }
+
+  togglePressure(): void {
+    this.showPressure = !this.showPressure;
+  }
+
+  toggleAppTemp(): void{
+    this.showAppTemp = !this.showAppTemp;
+  }
+
+  async displayInfo(latlng: L.LatLng, name: string): Promise<string> {
+    const url = this.generateForecastUrl(latlng.lat, latlng.lng);
+    return new Promise((resolve, reject) => {
+      this.http.get(url).subscribe((response: any) => {
+        // Estrai le informazioni necessarie dalla risposta
+        let popupContent = `<div style='font-size: 14px;'>
+          Lat: ${latlng.lat.toFixed(4)}<br>
+          Lng: ${latlng.lng.toFixed(4)}`
+
+        if (this.showTemperature) {
+          const temperature = response.current.temperature_2m;
+          popupContent += `<br>Temperatura: ${temperature.toFixed(2)} °C`;
+        }
+  
+        if (this.showWindSpeed10) {
+          const windSpeed10 = response.current.wind_speed_10m;
+          popupContent += `<br>Velocità Vento 10m: ${windSpeed10.toFixed(1)} km/h`;
+        }
+
+        if (this.showWindSpeed80) {
+          const windSpeed80 = response.current.wind_speed_80m;
+          popupContent += `<br>Velocità Vento 80m: ${windSpeed80.toFixed(1)} km/h`;
+        }
+
+        if (this.showWindSpeed120) {
+          const windSpeed120 = response.current.wind_speed_120m;
+          popupContent += `<br>Velocità Vento 120m: ${windSpeed120.toFixed(1)} km/h`;
+        }
+
+        if (this.showWindSpeed180) {
+          const windSpeed180 = response.current.wind_speed_180m;
+          popupContent += `<br>Velocità Vento 180m: ${windSpeed180.toFixed(1)} km/h`;
+        }
+
+        if (this.showWindDirection10) {
+          const windDirection10 = response.current.wind_direction_10m;
+          popupContent += `<br>Direzione Vento 10m: ${windDirection10} °`;
+        }
+
+        if (this.showWindDirection80) {
+          const windDirection80 = response.current.wind_direction_80m;
+          popupContent += `<br>Direzione Vento 80m: ${windDirection80} °`;
+        }
+        
+        if (this.showWindDirection120) {
+          const windDirection120 = response.current.wind_direction_120m;
+          popupContent += `<br>Direzione Vento 120m: ${windDirection120} °`;
+        }
+        
+        if (this.showWindDirection180) {
+          const windDirection180 = response.current.wind_direction_180m;
+          popupContent += `<br>Direzione Vento 180m: ${windDirection180} °`;
+        }
+        
+
+        if (this.showUmidity) {
+          const umidity = response.current.relative_humidity_2m;
+          popupContent += `<br>Umidità: ${umidity} %`;
+        }
+
+        if (this.showDewPoint) {
+          const dewPoint = response.current.dew_point_2m;
+          popupContent += `<br>Punto di Rugiada: ${dewPoint} °C`;
+        }
+
+        if (this.showPressure) {
+          const pressure = response.current.pressure_msl;
+          popupContent += `<br>Pressione: ${pressure} hPa`;
+        }
+
+        if (this.showAppTemp) {
+          const appTemp = response.current.apparent_temperature;
+          popupContent += `<br>Temperatura Percepita: ${appTemp} °C`;
+        }
+  
+        popupContent += `</div>`;
+  
+        resolve(popupContent);
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+  
+
 }
-}
+
+

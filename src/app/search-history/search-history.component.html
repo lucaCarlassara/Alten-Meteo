@@ -5,26 +5,26 @@
   </div>
   <input type="text" id="searchInput" [(ngModel)]="searchQuery" (input)="filterSearchHistory()" placeholder="Inserisci coordinate">
   
-  <table>
-    <thead>
-      <tr>
-      </tr>
-    </thead>
+  <table class="table">
     <tbody class="ricerche">
       <ng-container *ngIf="filteredLocations.length; else noResults">
         <tr *ngFor="let location of filteredLocations">
-          <td>{{ location.lat }}, {{ location.lng }}, {{ location.date }}</td>
+          <td>{{ location.lat }}</td>
+          <td>{{ location.lng }}</td>
+          <td>{{ location.date }}</td>
         </tr>
       </ng-container>
       <ng-template #noResults >
         <!-- Se filteredLocations è vuoto e la ricerca non ha prodotto risultati -->
         <tr *ngIf="!filteredLocations.length && searchQuery.trim() !== ''">
-          <td>Nessun risultato trovato</td>
+          <td colspan="3">Nessun risultato trovato</td>
         </tr>
         <!-- Se filteredLocations è vuoto e la ricerca è vuota -->
         <ng-container *ngIf="!filteredLocations.length && searchQuery.trim() === '';">
           <tr *ngFor="let location of selectedLocations">
-            <td>{{ location.lat }}, {{ location.lng }}, {{ location.date }}</td><br>
+            <td>{{ location.lat }}</td>
+            <td>{{ location.lng }}</td>
+            <td>{{ location.date }}</td>
           </tr>
         </ng-container>
       </ng-template>
